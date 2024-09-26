@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        font-family: "Roboto", sans-serif;
+        padding: 60px;
+        color: #333;
+        line-height: 1.5;
+      }
+
+      .image-gallery {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      img {
+        width: 300px;
+        height: 300px;
+      }
+      .bell-image {
+        width: 450px;
+        height: 450px;
+      }
+      .formula {
+        width: 400px;
+        height: 50px;
+      }
+      p {
+        line-height: 1.5;
+      }
+      .formula-2 {
+        width: 500px;
+        height: 300px;
+      }
+      .taj .back {
+        width: 25%;
+      }
+      .der .fft {
+        width: 250px;
+        height: 350px;
+      }
+
+      .flex-box {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 30px;
+      }
+
+      .der-small {
+        width: 100px;
+        height: 150px;
+      }
+      .human-der {
+        width: 280px;
+      }
+      .human-der-small {
+        width: 100px;
+        height: 100px;
+      }
+
+      .img-tile {
+        margin: 20px;
+      }
+      h3 {
+        width: 100%;
+      }
+      .apple-guass,
+      .apple-laplace,
+      .orange-gauss,
+      .orange-laplace {
+        width: 50%;
+        height: 50%;
+      }
+      .blend_formula {
+        width: 50%;
+        height: auto;
+      }
+      .blend_f {
+        width: 70%;
+        height: auto;
+        margin: 20px;
+      }
+    </style>
+    <title>Project 2</title>
+  </head>
+  <body>
+    <h1>Fun with Filters and Frequencies!</h1>
+    <div class="outer-box">
+      <h2>Part 1: Fun with Filters</h2>
+      <div>
+        <h3>Finite Difference Operator</h3>
+        <div>
+          <p>
+            Finite Difference Operators are used to approximate the rate of
+            change of a function, like an image, at discrete points. These
+            operators estimate the derivatives of the function at these points.
+            By applying the finite difference operators Dx and Dy to an image,
+            we can calculate the gradients in the x and y directions,
+            respectively. These gradients represent the rate of intensity change
+            in the image along the horizontal and vertical axes. The overall
+            gradient magnitude at each pixel is then computed by combining the x
+            and y gradients using the following formula:
+            <br />
+            <img src="./description/gradient_mag.png" class="formula" />
+            <br />
+
+            To generate an edge map, the gradient magnitudes are thresholded,
+            producing a binary image where edges are highlighted.
+          </p>
+          <div>
+            <div>
+              <img src="part1.1_img/horizontal_gradient.png" />
+              <img src="part1.1_img/Vertical_gradient.png" />
+            </div>
+            <div>
+              <img src="part1.1_img/gradient_magnitude.jpg" />
+              <img src="part1.1_img/edge_image.jpg" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Derivative of Gaussian (DoG) Filter</h3>
+      <div>
+        <h4>Method 1</h4>
+        <p>
+          The first method involves applying a Gaussian filter directly to the
+          original image to create a smoothed version before calculating the
+          gradients. This is achieved by convolving the image with finite
+          difference operators <code>D_x</code> and <code>D_y</code>.
+        </p>
+        <div>
+          <div>
+            <img src="part1.2.1_img/horizontal_gradient.png" />
+            <img src="part1.2.1_img/Vertical_gradient.png" />
+          </div>
+          <div>
+            <img src="part1.2.1_img/gradient_magnitude.jpg" />
+            <img src="part1.2.1_img/edge_image.jpg" />
+          </div>
+        </div>
+
+        <h4>Method 2</h4>
+        <p>
+          In the second method, the Gaussian filter is convolved with
+          <code>D_x</code> and <code>D_y</code> to create Difference of Gaussian
+          (DoG) filters, which are then applied to the original image to extract
+          edges.
+        </p>
+        <div>
+          <img src="part1.2.1_img/horizontal_gradient.png" />
+          <img src="part1.2.1_img/Vertical_gradient.png" />
+        </div>
+        <div>
+          <img src="part1.2.1_img/gradient_magnitude.jpg" />
+          <img src="part1.2.1_img/edge_image.jpg" />
+        </div>
+        <h4><strong>Observations:</strong></h4>
+        <p>
+          After applying the Gaussian filter, you may notice a reduction in
+          noise and a smoothing of edges. This is particularly useful in edge
+          detection as it helps to emphasize significant changes in intensity.
+        </p>
+        <h4>
+          The 2 methods produce similar result as before when comparing the
+          outputs of the two methods.
+        </h4>
+        <div>
+          <img src="part1.2.1_img/edge_image.jpg" />
+          <img src="part1.2.2_img/edge_image.jpg" />
+        </div>
+      </div>
+      <h2>Part 2: Fun with Frequencies!</h2>
+      <h3>2.1: Image Sharpening</h3>
+      <p>
+        The unsharp masking technique sharpens an image by enhancing its
+        high-frequency components, which are typically associated with edges and
+        fine details. This process begins with the original image, <em>f</em>,
+        and a blurred version of the image, <em>f</em> * <em>g</em>, created
+        using a Gaussian filter. To isolate the high-frequency details, the
+        blurred image is subtracted from the original, resulting in <em>f</em> -
+        <em>f</em> * <em>g</em>. These high frequencies are then amplified by a
+        factor <em>&alpha;</em> and added back to the original image
+        <br />
+        <img src="description/sharpen_formula.png" class="formula-2" />
+        <br />
+        This operation can be consolidated into a single convolution known as
+        the unsharp mask filter, which effectively sharpens the image.
+      </p>
+      <h4>Observations</h4>
+      <p>
+        In the images, I applied both blurring and sharpening techniques. As you
+        can see, the blurred images become progressively sharper as the alpha
+        value increases, eventually returning to their original sharpness or
+        even surpassing it, achieving a level of clarity better than the
+        original.
+      </p>
+      <div>
+        <img src="part2.1_img/taj_original.jpg" class="taj" />
+        <img src="part2.1_img/taj_blur.jpg" class="taj" />
+        <img src="part2.1_img/taj_sharpen_05.jpg" class="taj" />
+        <img src="part2.1_img/taj_sharpen_1.jpg" class="taj" />
+      </div>
+      <div>
+        <img src="part2.1_img/original_background.jpg" class="back" />
+        <img src="part2.1_img/blur_background.jpg" class="back" />
+        <img src="part2.1_img/sharpen_1_background.jpg" class="back" />
+        <img src="part2.1_img/sharpen_2_background.jpg" class="back" />
+      </div>
+      <h2>2.2: Hybrid Images</h2>
+      <p>
+        I implemented hybrid images using the approach described in the SIGGRAPH
+        2006 paper by Oliva, Torralba, and Schyns. The goal was to combine the
+        low-frequency components of one image with the high-frequency components
+        of another, creating a hybrid image that changes in interpretation
+        depending on the viewing distance. At a close range, the high-frequency
+        details dominate, while at a greater distance, the low-frequency parts
+        become more visible, resulting in a different perception of the image.
+        For this I applied a low-pass filter (Gaussian blur) to the first image
+        to retain only the low-frequency components. For the second image, I
+        created a high-pass filter by subtracting the Gaussian-filtered image
+        from the original, preserving only the high-frequency details. I then
+        combined the two filtered images to form a hybrid image. I experimented
+        with different cutoff frequencies to optimize the result.
+      </p>
+      <div>
+        <h3>Hybrid 1: Derek and Nutmeg</h3>
+        <div class="flex-box">
+          <div class="img-tile">
+            <div style="text-align: center">Derek Pic (low frequency)</div>
+            <div>
+              <img src="part2.2_img/DerekPicture.jpg" class="der" />
+            </div>
+          </div>
+          <div>
+            <div style="text-align: center">Nutmeg Pic (high frequencies)</div>
+            <div>
+              <img src="part2.2_img/nutmeg.jpg" class="der" />
+            </div>
+          </div>
+          <div>
+            <div style="text-align: center">Hybrid pic close</div>
+            <div>
+              <img src="part2.2_img/Derek_nutmeg.jpg" class="der" />
+            </div>
+          </div>
+          <div>
+            <div style="text-align: center">Hybrid pic far away.</div>
+            <div>
+              <img src="part2.2_img/Derek_nutmeg.jpg" class="der-small" />
+            </div>
+          </div>
+        </div>
+        <h3>Fourier Transform: frequency analysis for Derek and Nutmeg</h3>
+        <img src="fft_derek/fft_derek.jpg" class="fft" />
+        <img src="fft_derek/fft_low_derek.jpg" class="fft" />
+        <img src="fft_derek/fft_high_derek.jpg" class="fft" />
+        <br />
+        <img src="fft_derek/fft_nutmeg.jpg" class="fft" />
+        <img src="fft_derek/fft_low_nutmeg.jpg" class="fft" />
+        <img src="fft_derek/fft_high_nutmeg.jpg" class="fft" />
+        <img src="fft_derek/fft_hybrid.jpg" class="fft" />
+      </div>
+      <h3>Hybrid 2: sad smile</h3>
+      <div class="flex-box">
+        <div class="img-tile">
+          <div style="text-align: center">Happy Pic (low frequency)</div>
+          <div>
+            <img src="part2.2_img/happy.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Sad Pic (high frequencies)</div>
+          <div>
+            <img src="part2.2_img/sad.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic close</div>
+          <div>
+            <img src="part2.2_img/happy_sad.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic far away.</div>
+          <div>
+            <img
+              src="part2.2_img/happy_sad.jpg"
+              class="human-der human-der-small"
+            />
+          </div>
+        </div>
+      </div>
+
+      <h3>Fourier Transform: frequency analysis for sad smile</h3>
+
+      <img src="fft_sad_smile/fft_smile.jpg" class="fft" />
+      <img src="fft_sad_smile/fft_low_smile.jpg" class="fft" />
+      <img src="fft_sad_smile/fft_high_smile.jpg" class="fft" />
+      <br />
+      <img src="fft_sad_smile/fft_sad.jpg" class="fft" />
+      <img src="fft_sad_smile/fft_low_sad.jpg" class="fft" />
+      <img src="fft_sad_smile/fft_high_sad.jpg" class="fft" />
+      <img src="fft_sad_smile/fft_sad_smile_hybrid.jpg" class="fft" />
+
+      <h3>Hybrid 3: Smiling apple</h3>
+      <div class="flex-box">
+        <div class="img-tile">
+          <div style="text-align: center">Apple Pic (low frequency)</div>
+          <div>
+            <img src="part2.2_img/apple.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Man smile (high frequencies)</div>
+          <div>
+            <img src="part2.2_img/big_smile.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic close</div>
+          <div>
+            <img src="part2.2_img/apple_smile.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic far away.</div>
+          <div>
+            <img
+              src="part2.2_img/apple_smile.jpg"
+              class="human-der human-der-small"
+            />
+          </div>
+        </div>
+      </div>
+
+      <h3>Hybrid 4: Cupcake Child (Failure)</h3>
+      <h3>Failure hybrid image</h3>
+      <p>
+        I tried to align a cupcake to the child. However, the color differences
+        between the two images are too significant, making it difficult to blend
+        them effectively. As a result, the high-frequency image remains barely
+        visible, even when I try to enhance it.
+      </p>
+      <div class="flex-box">
+        <div class="img-tile">
+          <div style="text-align: center">Cupcake (low frequency)</div>
+          <div>
+            <img src="part2.2_img/cupcake.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Child (high frequencies)</div>
+          <div>
+            <img src="part2.2_img/child.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic close</div>
+          <div>
+            <img src="part2.2_img/cupcake_child.jpg" class="human-der" />
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center">Hybrid pic far away.</div>
+          <div>
+            <img
+              src="part2.2_img/cupcake_child.jpg"
+              class="human-der human-der-small"
+            />
+          </div>
+        </div>
+      </div>
+      <h2>2.3: Gaussian and Laplacian Stacks</h2>
+      <div>
+        <p>
+          In the Gaussian stack, I progressively blurred the image at each level
+          to capture increasingly smoothed versions of the original image. For
+          the Laplacian pyramid, I subtracted each blurred image from the
+          previous, less blurred version, which highlighted the fine details
+          lost in the blurring process. This allowed me to decompose the image
+          into different levels of detail without altering the image dimensions,
+          retaining the original resolution throughout the process.
+        </p>
+        <h3>Gaussian Stack</h3>
+        <div><img src="gauss/apple_gauss.jpg" class="apple-guass" /></div>
+        <div>
+          <img src="gauss/orange_gauss.jpg" class="orange-gauss" />
+        </div>
+        <h3>Laplace Stack</h3>
+        <div><img src="laplace/apple_laplace.jpg" class="apple-laplace" /></div>
+        <div>
+          <img src="laplace/orange_laplace.jpg" class="orange-laplace" />
+        </div>
+        <h3>Gaussian Stack with mask</h3>
+        <div><img src="gauss/half_apple_gauss.jpg" class="apple-guass" /></div>
+        <div>
+          <img src="gauss/half_orange_gauss.jpg" class="orange-gauss" />
+        </div>
+        <h3>Laplace Stack with mask</h3>
+        <div>
+          <img src="laplace/half_apple_laplace.jpg" class="apple-laplace" />
+        </div>
+        <div>
+          <img src="laplace/half_orange_laplace.jpg" class="orange-laplace" />
+        </div>
+      </div>
+      <h2>2.4: Multiresolution Blending</h2>
+      <div>
+        <p>
+          To blend images using Gaussian and Laplacian pyramids, I first
+          decomposed both images into their respective Laplacian stack,
+          capturing details at various levels of blur. At each level of the
+          pyramid, I blended corresponding layers from the two images by
+          weighting them according to the mask values. The blended result was
+          created by combining the pyramid layers from the finest to the
+          coarsest details. Finally, I reconstructed the final blended image by
+          summing the levels of the blended Laplacian stack, ensuring a smooth,
+          seamless transition between the two input images. This multi-scale
+          blending preserved important details and avoided visible seams that
+          might occur with simpler blending techniques.
+        </p>
+        <img src="./description/blend_formula.png" class="blend_formula" />
+        <img src="./blend/blended_output.png" class="blend_f" />
+        <img src="./blend/blended_man_apple_output.png" class="blend_f" />
+        <img src="./blend/blended_snowman_desert_output.png" class="blend_f" />
+      </div>
+    </div>
+  </body>
+</html>
